@@ -28,7 +28,7 @@ object App extends Logging {
 
     val muc = new MultiUserChat(connection, "test@conference.z0rchain.com")
 
-    muc.join("testbot")
+    muc.join("ScalaBot")
 
     log.info("muc joined")
     
