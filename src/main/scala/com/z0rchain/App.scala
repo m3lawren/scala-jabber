@@ -31,5 +31,9 @@ object App extends Logging {
     muc.join("testbot")
 
     log.info("muc joined")
+    
+    muc.sendMessage("Neeeeerds!")
+
+    Thread.sleep(1000)
   }
 }
