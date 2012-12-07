@@ -20,6 +20,7 @@ object BuildSettings {
 object Dependencies {
   val smack = "org.igniterealtime.smack" % "smack" % "3.2.1"
   val smackx = "org.igniterealtime.smack" % "smackx" % "3.2.1"
+  val log4j = "log4j" % "log4j" % "1.2.17"
 }
 
 object JabberBuild extends Build {
@@ -30,5 +31,5 @@ object JabberBuild extends Build {
   lazy val jabber = Project(
     id = "jabber", 
     base = file("."), 
-    settings = buildSettings ++ assemblySettings ++ Seq(libraryDependencies ++= Seq(smack, smackx))) 
+    settings = buildSettings ++ assemblySettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, log4j))) 
 }
