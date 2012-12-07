@@ -1,6 +1,7 @@
 import java.io.PrintWriter
 import sbt._
 import Keys._
+import sbtassembly.Plugin._
 
 object BuildSettings {
 
@@ -29,5 +30,5 @@ object JabberBuild extends Build {
   lazy val jabber = Project(
     id = "jabber", 
     base = file("."), 
-    settings = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx))) 
+    settings = buildSettings ++ assemblySettings ++ Seq(libraryDependencies ++= Seq(smack, smackx))) 
 }
