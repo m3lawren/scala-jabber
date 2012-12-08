@@ -1,17 +1,11 @@
 package com.z0rchain.jabber
 
-import org.jivesoftware.smack.{ConnectionConfiguration, PacketListener, XMPPConnection}
-import org.jivesoftware.smack.filter.PacketTypeFilter
-import org.jivesoftware.smack.packet.{Message, Packet}
-import org.jivesoftware.smackx.muc.{DiscussionHistory, MultiUserChat}
+import org.jivesoftware.smack._
+import org.jivesoftware.smack.filter._
+import org.jivesoftware.smack.packet._
+import org.jivesoftware.smackx.muc._
 
 import com.codahale.logula.Logging
-
-class DummyListener extends PacketListener with Logging {
-  def processPacket(packet: Packet) = {
-    log.info(packet.toXML)
-  }
-}
 
 /**
  * @author ${user.name}
