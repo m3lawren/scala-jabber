@@ -40,8 +40,23 @@ object JabberBuild extends Build {
   import Dependencies._
   import BuildSettings._
 
+  lazy val root = Project(
+    id           = "scala-jabber",
+    base         = file("."),
+    settings     = buildSettings,
+    aggregate    = Seq(jabber, logula)
+  )
+
+  lazy val logula = Project(
+    id           = "logula",
+    base         = file("logula"),
+    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(log4j))
+  )
+
   lazy val jabber = Project(
-    id = "jabber", 
-    base = file("."), 
-    settings = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, log4j))) 
+    id           = "jabber", 
+    base         = file("jabber"),
+    dependencies = Seq(logula),
+    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx))
+  ) 
 }
