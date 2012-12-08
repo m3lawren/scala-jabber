@@ -44,7 +44,7 @@ object JabberBuild extends Build {
     id           = "scala-jabber",
     base         = file("."),
     settings     = buildSettings,
-    aggregate    = Seq(jabber, logula)
+    aggregate    = Seq(jabber)
   )
 
   lazy val logula = Project(
