@@ -1,7 +1,6 @@
 import java.io.PrintWriter
 import sbt._
 import Keys._
-import sbtassembly.Plugin._
 
 object BuildSettings {
 
@@ -9,7 +8,20 @@ object BuildSettings {
   val buildVersion = "1.0"
   val buildScalaVersion = "2.9.2"
 
-  val buildSettings = Defaults.defaultSettings ++ Seq(
+  val WriteClasspath = config("writeClasspath")
+  val writeClasspath = TaskKey[Unit]("writeClasspath")
+  val writeClasspathTask = writeClasspath <<= (target, fullClasspath in Runtime) map { (target, cp) =>
+    def writeFile(file: File, str: String) {
+      val writer = new PrintWriter(file)
+      writer.println(str)
+      writer.close()
+    }
+    val cpString = cp.map(_.data).mkString(":")
+    val targetFile = (target / ".." / "cp.txt").asFile
+    writeFile(targetFile, cpString)
+  }
+
+  val buildSettings = Defaults.defaultSettings ++ Seq(writeClasspathTask) ++ Seq(
     organization := buildOrganization,
     version := buildVersion,
     scalaVersion := buildScalaVersion,
@@ -31,5 +43,5 @@ object JabberBuild extends Build {
   lazy val jabber = Project(
     id = "jabber", 
     base = file("."), 
-    settings = buildSettings ++ assemblySettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, log4j))) 
+    settings = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, log4j))) 
 }
