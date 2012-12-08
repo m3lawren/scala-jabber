@@ -1,4 +1,4 @@
-package com.z0rchain
+package com.z0rchain.jabber
 
 import org.jivesoftware.smack.{ConnectionConfiguration, XMPPConnection}
 import org.jivesoftware.smackx.muc.MultiUserChat

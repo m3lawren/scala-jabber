@@ -1,0 +1,5 @@
+#!/bin/bash
+
+MY_PATH=$(dirname $0)
+
+exec java -server -cp $(cat ${MY_PATH}/../cp.txt) com.z0rchain.jabber.App "$@"
