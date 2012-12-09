@@ -1,5 +1,7 @@
 package com.z0rchain.jabber
 
+import com.z0rchain.jabber.hook._
+
 import org.jivesoftware.smack._
 import org.jivesoftware.smack.filter._
 import org.jivesoftware.smack.packet._
@@ -30,7 +32,11 @@ object App extends Logging {
     log.info("connected")
 
     val muc = new MultiUserChat(connection, "test@conference.z0rchain.com")
-    val listener = new EchoListener(muc)
+    val listener = new HookListener(muc)
+
+    listener.addHook(new CommandHook("!echo", {(message: String, sender: String) =>
+      Some(message)
+    }))
 
     connection.addPacketListener(listener, new PacketTypeFilter(classOf[Message]))
 
