@@ -34,7 +34,7 @@ object App extends Logging {
     val muc = new MultiUserChat(connection, "test@conference.z0rchain.com")
     val listener = new HookListener(muc)
 
-    listener.addHook(new CommandHook("!echo", {(message: String, sender: String) =>
+    listener.addHook(CommandHook("!echo", {(message: String, sender: String) =>
       Some(message)
     }))
 
