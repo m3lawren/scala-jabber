@@ -22,20 +22,22 @@ object App extends Logging {
     config.setCompressionEnabled(true)
     config.setSASLAuthenticationEnabled(true)
 
-    val listener = new DummyListener
 
     val connection = new XMPPConnection(config)
-    connection.addPacketListener(listener, new PacketTypeFilter(classOf[Message]))
-
     connection.connect()
     connection.login("test", "test", "test")
 
     log.info("connected")
 
+    val muc = new MultiUserChat(connection, "test@conference.z0rchain.com")
+    val listener = new EchoListener(muc)
+
+    connection.addPacketListener(listener, new PacketTypeFilter(classOf[Message]))
+
+
     val history = new DiscussionHistory
     history.setMaxStanzas(0)
 
-    val muc = new MultiUserChat(connection, "test@conference.z0rchain.com")
 
     muc.join("ScalaBot", "", history, 100000)
 
@@ -43,6 +45,6 @@ object App extends Logging {
     
     muc.sendMessage("Neeeeerds!")
 
-    Thread.sleep(10000)
+    Thread.sleep(100000)
   }
 }
