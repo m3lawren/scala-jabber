@@ -1,6 +1,6 @@
 package com.z0rchain.jabber.hook
 
-import org.jivesoftware.smack.packet._
+import org.jivesoftware.smack.packet.Message
 
 class ListenHook(handler: ListenHook.Handler) extends Hook {
 

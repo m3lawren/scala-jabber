@@ -1,11 +1,11 @@
 package com.z0rchain.jabber
 
-import com.z0rchain.jabber.hook._
+import com.z0rchain.jabber.hook.{CommandHook, HookListener}
 
-import org.jivesoftware.smack._
-import org.jivesoftware.smack.filter._
-import org.jivesoftware.smack.packet._
-import org.jivesoftware.smackx.muc._
+import org.jivesoftware.smack.{ConnectionConfiguration, XMPPConnection}
+import org.jivesoftware.smack.filter.PacketTypeFilter
+import org.jivesoftware.smack.packet.Message
+import org.jivesoftware.smackx.muc.{DiscussionHistory, MultiUserChat}
 
 import com.codahale.logula.Logging
 

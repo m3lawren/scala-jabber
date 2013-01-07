@@ -1,8 +1,8 @@
 package com.z0rchain.jabber.hook
 
-import org.jivesoftware.smack._
-import org.jivesoftware.smack.packet._
-import org.jivesoftware.smackx.muc._
+import org.jivesoftware.smack.PacketListener
+import org.jivesoftware.smack.packet.{Message, Packet}
+import org.jivesoftware.smackx.muc.{MultiUserChat}
 
 class HookListener(chat: MultiUserChat) extends PacketListener {
 

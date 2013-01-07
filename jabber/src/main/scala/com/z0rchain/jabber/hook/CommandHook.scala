@@ -1,6 +1,6 @@
 package com.z0rchain.jabber.hook
 
-import org.jivesoftware.smack.packet._
+import org.jivesoftware.smack.packet.Message
 
 class CommandHook(command: String, handler: CommandHook.Handler) extends Hook {
   val _command = """^%s\s*([^\s].*[^\s]?)\s*""".format(command).r
