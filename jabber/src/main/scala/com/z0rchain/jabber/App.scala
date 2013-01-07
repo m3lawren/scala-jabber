@@ -51,6 +51,8 @@ object App extends Logging {
     
     muc.sendMessage("Neeeeerds!")
 
-    Thread.sleep(100000)
+    Thread.sleep(10000)
+
+    muc.sendMessage("And away I go!")
   }
 }
