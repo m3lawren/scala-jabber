@@ -1,6 +1,6 @@
 package com.z0rchain.jabber
 
-import com.z0rchain.jabber.hook.{CommandHook, HookListener}
+import com.z0rchain.jabber.hook.{CommandHook, HookListener, ListenHook}
 
 import org.jivesoftware.smack.{ConnectionConfiguration, XMPPConnection}
 import org.jivesoftware.smack.filter.PacketTypeFilter
@@ -36,6 +36,9 @@ object App extends Logging {
 
     listener.addHook(CommandHook("!echo", {(message: String, sender: String) =>
       Some(message)
+    }))
+    listener.addHook(ListenHook({(message: String, sender: String) => 
+      log.info("%s: %s".format(sender, message))
     }))
 
     connection.addPacketListener(listener, new PacketTypeFilter(classOf[Message]))
