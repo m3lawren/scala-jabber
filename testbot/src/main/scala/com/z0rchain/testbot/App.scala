@@ -1,4 +1,4 @@
-package com.z0rchain.jabber
+package com.z0rchain.testbot
 
 import com.z0rchain.jabber.hook.{CommandHook, HookListener, ListenHook}
 
@@ -13,8 +13,6 @@ import com.codahale.logula.Logging
  * @author ${user.name}
  */
 object App extends Logging {
-
-  def foo(x : Array[String]) = x.foldLeft("")((a,b) => a + b)
 
   def main(args : Array[String]) {
 
@@ -46,7 +44,6 @@ object App extends Logging {
 
     val history = new DiscussionHistory
     history.setMaxStanzas(0)
-
 
     muc.join("ScalaBot", "", history, 100000)
 
