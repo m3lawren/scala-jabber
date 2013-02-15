@@ -2,7 +2,12 @@ import java.io.PrintWriter
 import sbt._
 import Keys._
 
+object Resolvers {
+  val typesafe = "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases"
+}
+
 object BuildSettings {
+  import Resolvers._
 
   val buildOrganization = "com.z0rchain"
   val buildVersion = "1.0"
@@ -25,7 +30,8 @@ object BuildSettings {
     organization := buildOrganization,
     version := buildVersion,
     scalaVersion := buildScalaVersion,
-    scalacOptions := Seq("-deprecation", "-unchecked")
+    scalacOptions := Seq("-deprecation", "-unchecked"),
+    resolvers ++= Seq(typesafe)
   )
 }
 
@@ -35,6 +41,7 @@ object Dependencies {
   val log4j = "log4j" % "log4j" % "1.2.17"
   val slf4j_api = "org.slf4j" % "slf4j-api" % "1.7.2"
   val slf4j_log4j = "org.slf4j" % "slf4j-log4j12" % "1.7.2"
+  val akka = "com.typesafe.akka" %% "akka-actor" % "2.1.0"
 }
 
 object JabberBuild extends Build {
@@ -52,7 +59,7 @@ object JabberBuild extends Build {
   lazy val jabber = Project(
     id           = "jabber", 
     base         = file("jabber"),
-    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx))
+    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, akka))
   ) 
 
   lazy val testbot = Project(
