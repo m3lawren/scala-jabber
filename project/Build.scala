@@ -33,6 +33,8 @@ object Dependencies {
   val smack = "org.igniterealtime.smack" % "smack" % "3.2.1"
   val smackx = "org.igniterealtime.smack" % "smackx" % "3.2.1"
   val log4j = "log4j" % "log4j" % "1.2.17"
+  val slf4j_api = "org.slf4j" % "slf4j-api" % "1.7.2"
+  val slf4j_log4j = "org.slf4j" % "slf4j-log4j12" % "1.7.2"
 }
 
 object JabberBuild extends Build {
@@ -47,23 +49,16 @@ object JabberBuild extends Build {
     aggregate    = Seq(testbot)
   )
 
-  lazy val logula = Project(
-    id           = "logula",
-    base         = file("logula"),
-    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(log4j))
-  )
-
   lazy val jabber = Project(
     id           = "jabber", 
     base         = file("jabber"),
-    dependencies = Seq(logula),
     settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx))
   ) 
 
   lazy val testbot = Project(
     id           = "testbot", 
     base         = file("testbot"),
-    dependencies = Seq(logula, jabber),
-    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx))
+    dependencies = Seq(jabber),
+    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, slf4j_api, slf4j_log4j))
   ) 
 }

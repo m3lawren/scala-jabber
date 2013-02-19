@@ -1,5 +1,14 @@
 #!/bin/bash
 
 MY_PATH=$(dirname $0)
+PROJ_DIR=${MY_PATH}/..
 
-exec java -server -cp $(cat ${MY_PATH}/../cp.txt) com.z0rchain.testbot.App "$@"
+# Maven and sbt put classes in different places. Yay.  Give sbt pref, fallback to maven.
+# sbt:   target/scala-VER/classes
+# maven: target/classes
+CLASSES_DIR="${PROJ_DIR}/target/scala*/classes"
+if ! ls -1 ${PROJ_DIR}/target/scala*/classes > /dev/null 2>&1; then
+    CLASSES_DIR=${PROJ_DIR}/target/classes
+fi
+
+exec java -server -cp $(cat ${PROJ_DIR}/cp.txt):$(ls -1d ${CLASSES_DIR} | tr '\n' ':' ) com.z0rchain.testbot.App "$@"

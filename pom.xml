@@ -8,7 +8,6 @@
   <name>${project.artifactId}</name>
   <inceptionYear>2012</inceptionYear>
   <modules>
-    <module>logula</module>
     <module>jabber</module>
     <module>testbot</module>
   </modules>
@@ -38,6 +37,16 @@
         <version>1.2.17</version>
       </dependency>
       <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.7.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.2</version>
+      </dependency>
+      <dependency>
         <groupId>org.igniterealtime.smack</groupId>
         <artifactId>smack</artifactId>
         <version>3.2.1</version>
@@ -46,11 +55,6 @@
         <groupId>org.igniterealtime.smack</groupId>
         <artifactId>smackx</artifactId>
         <version>3.2.1</version>
-      </dependency>
-      <dependency>
-        <groupId>com.codahale</groupId>
-        <artifactId>logula</artifactId>
-        <version>1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.z0rchain</groupId>
@@ -100,6 +104,27 @@
             <include>**/*Suite.*</include>
           </includes>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <!-- Write a file containing the classpath for all runtime dependencies (not test)
+
+                 This is used in dev mode for scripts to source.
+            -->
+            <id>build-classpath</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>build-classpath</goal>
+            </goals>
+            <configuration>
+              <outputFile>cp.txt</outputFile>
+              <includeScope>runtime</includeScope>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
