@@ -11,7 +11,7 @@ object BuildSettings {
 
   val buildOrganization = "com.z0rchain"
   val buildVersion = "1.0"
-  val buildScalaVersion = "2.10.0"
+  val buildScalaVersion = "2.10.1"
 
   val WriteClasspath = config("writeClasspath")
   val writeClasspath = TaskKey[Unit]("writeClasspath")
