@@ -16,3 +16,7 @@ project/plugins/project/
 .*.sw*
 
 cp.txt
+
+# IntelliJ IDEA
+*.iml
+.idea
