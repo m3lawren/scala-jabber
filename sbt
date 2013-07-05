@@ -9,5 +9,5 @@ exec java \
   -noverify \
   -XX:MaxPermSize=512m \
   -Xss2M \
-  -jar $(dirname $0)/project/sbt-launch-0-12-3.jar \
+  -jar $(dirname $0)/project/sbt-launch-0-12-4.jar \
   "$@"
