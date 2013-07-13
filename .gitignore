@@ -20,3 +20,5 @@ cp.txt
 # IntelliJ IDEA
 *.iml
 .idea
+
+*.properties

@@ -9,6 +9,12 @@ import org.jivesoftware.smackx.muc.{DiscussionHistory, MultiUserChat}
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
+import org.rogach.scallop.ScallopConf
+
+class CmdLine(args: Seq[String]) extends ScallopConf(args) {
+  val config = opt[String](required = true)
+}
 
 object App {
 
@@ -16,14 +22,25 @@ object App {
 
   def main(args : Array[String]) {
 
-    val config = new ConnectionConfiguration("z0rchain.com")
+    val cmdLine = new CmdLine(args)
+
+    val propsFile = new File(cmdLine.config())
+
+    if (!propsFile.exists) {
+      _logger.error("Properties file %s does not exist. Please create it based off of the sample config file.", propsFile.getCanonicalPath)
+      return
+    }
+
+    val botConfig = BotConfig.loadFromFile(propsFile)
+
+    val config = new ConnectionConfiguration(botConfig.domain)
     config.setCompressionEnabled(true)
     config.setSASLAuthenticationEnabled(true)
 
 
     val connection = new XMPPConnection(config)
     connection.connect()
-    connection.login("test", "test", "test")
+    connection.login(botConfig.user, botConfig.password, botConfig.resource)
 
     _logger.info("connected")
 

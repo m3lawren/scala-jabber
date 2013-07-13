@@ -42,6 +42,7 @@ object Dependencies {
   val slf4j_api = "org.slf4j" % "slf4j-api" % "1.7.3"
   val slf4j_log4j = "org.slf4j" % "slf4j-log4j12" % "1.7.3"
   val akka = "com.typesafe.akka" %% "akka-actor" % "2.1.2"
+  val scallop = "org.rogach" %% "scallop" % "0.9.3"
 }
 
 object JabberBuild extends Build {
@@ -66,6 +67,6 @@ object JabberBuild extends Build {
     id           = "testbot", 
     base         = file("testbot"),
     dependencies = Seq(jabber),
-    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, slf4j_api, slf4j_log4j))
+    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, slf4j_api, slf4j_log4j, scallop))
   ) 
 }
