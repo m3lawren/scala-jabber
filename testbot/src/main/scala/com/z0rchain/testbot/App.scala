@@ -11,6 +11,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import org.rogach.scallop.ScallopConf
+import akka.actor.{Props, ActorSystem}
+import com.z0rchain.jabber.actors.RosterActor
+import com.z0rchain.jabber.messages.RosterInit
 
 class CmdLine(args: Seq[String]) extends ScallopConf(args) {
   val config = opt[String](required = true)
@@ -37,6 +40,8 @@ object App {
     config.setCompressionEnabled(true)
     config.setSASLAuthenticationEnabled(true)
 
+    val actorSystem = ActorSystem("ScalaBot")
+    val rosterActor = actorSystem.actorOf(Props[RosterActor])
 
     val connection = new XMPPConnection(config)
     connection.connect()
@@ -44,9 +49,10 @@ object App {
 
     _logger.info("connected")
 
+    rosterActor ! RosterInit("test@conference.z0rchain.com")
     val muc = new MultiUserChat(connection, "test@conference.z0rchain.com")
-    val listener = new HookListener(muc)
-    val listener2 = new HookListener(muc)
+    val listener = new HookListener(muc, rosterActor)
+    val listener2 = new HookListener(muc, rosterActor)
 
     connection.addPacketListener(listener, new PacketTypeFilter(classOf[Message]))
     connection.addPacketListener(listener2, new PacketTypeFilter(classOf[Presence]))

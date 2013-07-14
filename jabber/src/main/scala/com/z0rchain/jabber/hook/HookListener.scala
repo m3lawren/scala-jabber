@@ -5,8 +5,12 @@ import org.jivesoftware.smack.packet.{Presence, Message, Packet}
 import org.jivesoftware.smackx.muc.{MultiUserChat}
 import org.slf4j.LoggerFactory
 import org.jivesoftware.smackx.packet.MUCUser
+import akka.actor.ActorRef
+import com.z0rchain.jabber.messages.{RosterPart, RosterJoin}
+import org.jivesoftware.smack.util.StringUtils
+import com.z0rchain.jabber.JID
 
-class HookListener(chat: MultiUserChat) extends PacketListener {
+class HookListener(chat: MultiUserChat, rosterActor: ActorRef) extends PacketListener {
 
   private val _logger = LoggerFactory.getLogger(getClass)
 
@@ -25,12 +29,12 @@ class HookListener(chat: MultiUserChat) extends PacketListener {
 
         mucUserOpt match {
           case Some(mucUser) =>
-            val userJid = mucUser.getItem.getJid
-            val userNick = presence.getFrom
+            val userJid = JID(mucUser.getItem.getJid)
+            val userNick = JID(presence.getFrom).resource.get
             if (presence.isAvailable)
-              _logger.info("User %s is available as %s".format(userJid, userNick))
+              rosterActor ! RosterJoin(StringUtils.parseBareAddress(presence.getFrom), userJid, userNick)
             else
-              _logger.info("User %s is no longer available as %s".format(userJid, userNick))
+              rosterActor ! RosterPart(StringUtils.parseBareAddress(presence.getFrom), userJid, userNick)
 
           case _ =>
             _logger.info("Ignoring non-MUC presence from %s.".format(presence.getFrom))
