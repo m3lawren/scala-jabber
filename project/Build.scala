@@ -60,7 +60,7 @@ object JabberBuild extends Build {
   lazy val jabber = Project(
     id           = "jabber", 
     base         = file("jabber"),
-    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, akka))
+    settings     = buildSettings ++ Seq(libraryDependencies ++= Seq(smack, smackx, akka, slf4j_api))
   ) 
 
   lazy val testbot = Project(
