@@ -39,9 +39,9 @@ object Dependencies {
   val smack = "org.igniterealtime.smack" % "smack" % "3.2.1"
   val smackx = "org.igniterealtime.smack" % "smackx" % "3.2.1"
   val log4j = "log4j" % "log4j" % "1.2.17"
-  val slf4j_api = "org.slf4j" % "slf4j-api" % "1.7.3"
-  val slf4j_log4j = "org.slf4j" % "slf4j-log4j12" % "1.7.3"
-  val akka = "com.typesafe.akka" %% "akka-actor" % "2.1.2"
+  val slf4j_api = "org.slf4j" % "slf4j-api" % "1.7.5"
+  val slf4j_log4j = "org.slf4j" % "slf4j-log4j12" % "1.7.5"
+  val akka = "com.typesafe.akka" %% "akka-actor" % "2.2.0"
   val scallop = "org.rogach" %% "scallop" % "0.9.3"
 }
 
