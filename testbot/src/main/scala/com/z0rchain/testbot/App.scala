@@ -30,7 +30,7 @@ object App {
     val propsFile = new File(cmdLine.config())
 
     if (!propsFile.exists) {
-      _logger.error("Properties file %s does not exist. Please create it based off of the sample config file.", propsFile.getCanonicalPath)
+      _logger.error("Properties file %s does not exist. Please create it based off of the sample config file.".format(propsFile.getCanonicalPath))
       return
     }
 
