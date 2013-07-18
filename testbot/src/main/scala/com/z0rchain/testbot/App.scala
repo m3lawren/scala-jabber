@@ -4,7 +4,7 @@ import akka.actor.{Props, ActorSystem}
 import com.z0rchain.jabber.actors.RosterActor
 import com.z0rchain.jabber.hook.HookListener
 import java.io.File
-import org.jivesoftware.smack.filter.PacketTypeFilter
+import org.jivesoftware.smack.filter.{OrFilter, PacketTypeFilter}
 import org.jivesoftware.smack.packet.{Presence, Message}
 import org.jivesoftware.smack.{ConnectionConfiguration, XMPPConnection}
 import org.jivesoftware.smackx.muc.{DiscussionHistory, MultiUserChat}
@@ -52,10 +52,8 @@ object App {
 
     val muc = new MultiUserChat(connection, botConfig.channel)
     val listener = new HookListener(muc, rosterActor)
-    val listener2 = new HookListener(muc, rosterActor)
 
-    connection.addPacketListener(listener, new PacketTypeFilter(classOf[Message]))
-    connection.addPacketListener(listener2, new PacketTypeFilter(classOf[Presence]))
+    connection.addPacketListener(listener, new OrFilter(new PacketTypeFilter(classOf[Message]), new PacketTypeFilter(classOf[Presence])))
 
     val history = new DiscussionHistory
     history.setMaxStanzas(0)

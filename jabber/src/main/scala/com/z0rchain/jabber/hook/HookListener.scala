@@ -14,16 +14,9 @@ class HookListener(chat: MultiUserChat, rosterActor: ActorRef) extends PacketLis
 
   private val _logger = LoggerFactory.getLogger(getClass)
 
-  private var hooks: Seq[Hook] = Seq()
-
-  def addHook(hook: Hook) = {
-    hooks = hooks ++ Seq(hook)
-  }
 
   def processPacket(packet: Packet) = {
     packet match {
-      case message: Message =>
-        hooks.foreach(hook => processHook(hook, message))
       case presence: Presence =>
         val mucUserOpt = Option(presence.getExtension("http://jabber.org/protocol/muc#user").asInstanceOf[MUCUser])
 
@@ -40,7 +33,7 @@ class HookListener(chat: MultiUserChat, rosterActor: ActorRef) extends PacketLis
             _logger.debug("Ignoring non-MUC presence from %s.".format(presence.getFrom))
         }
       case _ =>
-        _logger.debug("Got unknown packet: %s".format(packet.toXML))
+        _logger.info("Got unknown packet: %s".format(packet.toXML))
     }
   }
 
