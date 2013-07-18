@@ -30,18 +30,22 @@ class RosterActor extends Actor {
   def receive = {
     case m: RosterInit =>
       updateChannel(m.channel, () => ())
+
     case m: RosterJoin =>
       _logger.info("User %s joined channel %s as %s".format(m.jid, m.channel, m.nick))
       updateChannel(m.channel, () => {
         _roster += RosterEntry(m.nick, m.jid)
       })
+
     case m: RosterPart =>
       _logger.info("User %s parted channel %s as %s".format(m.jid, m.channel, m.nick))
       updateChannel(m.channel, () => {
         _roster -= RosterEntry(m.nick, m.jid)
       })
+
     case RosterGet =>
       sender ! _roster.toSet
+
     case x =>
       _logger.warn("Unknown message received: %s".format(x))
   }
