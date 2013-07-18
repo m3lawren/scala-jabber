@@ -43,11 +43,15 @@ object App {
     val actorSystem = ActorSystem("ScalaBot")
     val rosterActor = actorSystem.actorOf(Props[RosterActor])
 
+    _logger.info("Connecting as %s@%s/%s...".format(botConfig.user, botConfig.domain, botConfig.resource))
+
     val connection = new XMPPConnection(config)
     connection.connect()
     connection.login(botConfig.user, botConfig.password, botConfig.resource)
 
-    _logger.info("connected")
+    _logger.info("Connected.")
+
+    _logger.info("Joining channel %s...".format(botConfig.channel))
 
     rosterActor ! RosterInit(botConfig.channel)
     val muc = new MultiUserChat(connection, botConfig.channel)
@@ -62,14 +66,16 @@ object App {
 
     muc.join(botConfig.nick, "", history, 100000)
 
-    _logger.info("muc joined")
+    _logger.info("Channel %s joined.".format(botConfig.channel))
     
     muc.sendMessage("Neeeeerds!")
 
-    Thread.sleep(100000)
+    Thread.sleep(1000)
 
     muc.sendMessage("And away I go!")
 
+    _logger.info("Shutting down actor system...")
     actorSystem.shutdown()
+    _logger.info("Shutdown successful.")
   }
 }
