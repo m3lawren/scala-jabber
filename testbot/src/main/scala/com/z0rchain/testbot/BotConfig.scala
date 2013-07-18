@@ -13,6 +13,9 @@ class BotConfig(props: Properties) {
   lazy val user = getOpt("user").getOrElse(sys.error("No user specified"))
   lazy val password = getOpt("password").getOrElse(sys.error("No password specified"))
   lazy val resource = getOpt("resource").getOrElse(sys.error("No resource specified"))
+
+  lazy val channel = getOpt("channel").getOrElse(sys.error("No channel specified"))
+  lazy val nick = getOpt("nick").getOrElse(resource)
 }
 
 

@@ -49,8 +49,8 @@ object App {
 
     _logger.info("connected")
 
-    rosterActor ! RosterInit("test@conference.z0rchain.com")
-    val muc = new MultiUserChat(connection, "test@conference.z0rchain.com")
+    rosterActor ! RosterInit(botConfig.channel)
+    val muc = new MultiUserChat(connection, botConfig.channel)
     val listener = new HookListener(muc, rosterActor)
     val listener2 = new HookListener(muc, rosterActor)
 
@@ -60,7 +60,7 @@ object App {
     val history = new DiscussionHistory
     history.setMaxStanzas(0)
 
-    muc.join("ScalaBot", "", history, 100000)
+    muc.join(botConfig.nick, "", history, 100000)
 
     _logger.info("muc joined")
     
