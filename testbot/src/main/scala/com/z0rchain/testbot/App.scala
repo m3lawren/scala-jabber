@@ -69,5 +69,7 @@ object App {
     Thread.sleep(100000)
 
     muc.sendMessage("And away I go!")
+
+    actorSystem.shutdown()
   }
 }
