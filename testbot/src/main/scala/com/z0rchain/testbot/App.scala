@@ -1,7 +1,7 @@
 package com.z0rchain.testbot
 
 import akka.actor.{Props, ActorSystem}
-import com.z0rchain.jabber.actors.RosterActor
+import com.z0rchain.jabber.actors.{MessageActor, RosterActor}
 import com.z0rchain.jabber.hook.HookListener
 import java.io.File
 import org.jivesoftware.smack.filter.{OrFilter, PacketTypeFilter}
@@ -39,6 +39,7 @@ object App {
 
     val actorSystem = ActorSystem("ScalaBot")
     val rosterActor = actorSystem.actorOf(Props[RosterActor])
+    val messageActor = actorSystem.actorOf(Props[MessageActor])
 
     _logger.info("Connecting as %s@%s/%s...".format(botConfig.user, botConfig.domain, botConfig.resource))
 
@@ -51,7 +52,7 @@ object App {
     _logger.info("Joining channel %s...".format(botConfig.channel))
 
     val muc = new MultiUserChat(connection, botConfig.channel)
-    val listener = new HookListener(muc, rosterActor)
+    val listener = new HookListener(muc, rosterActor, messageActor)
 
     connection.addPacketListener(listener, new OrFilter(new PacketTypeFilter(classOf[Message]), new PacketTypeFilter(classOf[Presence])))
 
@@ -62,14 +63,8 @@ object App {
 
     _logger.info("Channel %s joined.".format(botConfig.channel))
     
-    muc.sendMessage("Neeeeerds!")
+    muc.sendMessage("Sup nerds")
 
-    Thread.sleep(60000)
-
-    muc.sendMessage("And away I go!")
-
-    _logger.info("Shutting down actor system...")
-    actorSystem.shutdown()
     actorSystem.awaitTermination()
     _logger.info("Shutdown successful.")
   }

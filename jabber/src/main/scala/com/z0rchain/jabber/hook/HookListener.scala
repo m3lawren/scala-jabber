@@ -6,11 +6,11 @@ import org.jivesoftware.smackx.muc.{MultiUserChat}
 import org.slf4j.LoggerFactory
 import org.jivesoftware.smackx.packet.MUCUser
 import akka.actor.ActorRef
-import com.z0rchain.jabber.messages.{RosterPart, RosterJoin}
+import com.z0rchain.jabber.messages.{MUCMessage, RosterPart, RosterJoin}
 import org.jivesoftware.smack.util.StringUtils
 import com.z0rchain.jabber.JID
 
-class HookListener(chat: MultiUserChat, rosterActor: ActorRef) extends PacketListener {
+class HookListener(chat: MultiUserChat, rosterActor: ActorRef, messageActor: ActorRef) extends PacketListener {
 
   private val _logger = LoggerFactory.getLogger(getClass)
 
@@ -32,6 +32,8 @@ class HookListener(chat: MultiUserChat, rosterActor: ActorRef) extends PacketLis
           case _ =>
             _logger.debug("Ignoring non-MUC presence from %s.".format(presence.getFrom))
         }
+      case message: Message if message.getType == Message.Type.groupchat =>
+        messageActor ! MUCMessage(JID(message.getFrom), JID(message.getTo), message.getBody)
       case _ =>
         _logger.info("Got unknown packet: %s".format(packet.toXML))
     }

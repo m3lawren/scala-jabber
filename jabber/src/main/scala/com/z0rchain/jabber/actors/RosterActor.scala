@@ -41,7 +41,7 @@ class RosterActor extends Actor {
       sender ! _channelRosters.getOrElse(channel, Set.empty[RosterEntry])
 
     case RosterDump =>
-      _logger.info("Roster dump: %s".format(_channelRosters))
+      _logger.debug("Roster dump: %s".format(_channelRosters))
 
     case x =>
       _logger.warn("Unknown message received: %s".format(x))
