@@ -30,7 +30,7 @@ object BuildSettings {
     organization := buildOrganization,
     version := buildVersion,
     scalaVersion := buildScalaVersion,
-    scalacOptions := Seq("-deprecation", "-unchecked"),
+    scalacOptions := Seq("-deprecation", "-unchecked", "-feature"),
     resolvers ++= Seq(typesafe)
   )
 }
