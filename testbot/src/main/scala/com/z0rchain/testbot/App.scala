@@ -1,19 +1,16 @@
 package com.z0rchain.testbot
 
-import com.z0rchain.jabber.hook.{CommandHook, HookListener, ListenHook}
-
-import org.jivesoftware.smack.{ConnectionConfiguration, XMPPConnection}
-import org.jivesoftware.smack.filter.PacketTypeFilter
-import org.jivesoftware.smack.packet.{Presence, Message}
-import org.jivesoftware.smackx.muc.{DiscussionHistory, MultiUserChat}
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import java.io.File
-import org.rogach.scallop.ScallopConf
 import akka.actor.{Props, ActorSystem}
 import com.z0rchain.jabber.actors.RosterActor
-import com.z0rchain.jabber.messages.RosterInit
+import com.z0rchain.jabber.hook.HookListener
+import java.io.File
+import org.jivesoftware.smack.filter.PacketTypeFilter
+import org.jivesoftware.smack.packet.{Presence, Message}
+import org.jivesoftware.smack.{ConnectionConfiguration, XMPPConnection}
+import org.jivesoftware.smackx.muc.{DiscussionHistory, MultiUserChat}
+import org.rogach.scallop.ScallopConf
+import org.slf4j.LoggerFactory
+import com.z0rchain.jabber.messages.RosterDump
 
 class CmdLine(args: Seq[String]) extends ScallopConf(args) {
   val config = opt[String](required = true)
@@ -53,7 +50,6 @@ object App {
 
     _logger.info("Joining channel %s...".format(botConfig.channel))
 
-    rosterActor ! RosterInit(botConfig.channel)
     val muc = new MultiUserChat(connection, botConfig.channel)
     val listener = new HookListener(muc, rosterActor)
     val listener2 = new HookListener(muc, rosterActor)
@@ -74,8 +70,11 @@ object App {
 
     muc.sendMessage("And away I go!")
 
+    rosterActor ! RosterDump
+
     _logger.info("Shutting down actor system...")
     actorSystem.shutdown()
+    actorSystem.awaitTermination()
     _logger.info("Shutdown successful.")
   }
 }
