@@ -10,7 +10,7 @@ import org.jivesoftware.smack.{ConnectionConfiguration, XMPPConnection}
 import org.jivesoftware.smackx.muc.{DiscussionHistory, MultiUserChat}
 import org.rogach.scallop.ScallopConf
 import org.slf4j.LoggerFactory
-import com.z0rchain.jabber.messages.RosterDump
+
 
 class CmdLine(args: Seq[String]) extends ScallopConf(args) {
   val config = opt[String](required = true)
@@ -66,11 +66,9 @@ object App {
     
     muc.sendMessage("Neeeeerds!")
 
-    Thread.sleep(1000)
+    Thread.sleep(60000)
 
     muc.sendMessage("And away I go!")
-
-    rosterActor ! RosterDump
 
     _logger.info("Shutting down actor system...")
     actorSystem.shutdown()

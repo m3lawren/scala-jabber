@@ -1,10 +1,11 @@
 package com.z0rchain.jabber.actors
 
 import akka.actor.Actor
-import org.slf4j.LoggerFactory
-import com.z0rchain.jabber.messages.{RosterDump, RosterGet, RosterPart, RosterJoin}
-import com.z0rchain.jabber.JID
 import collection.mutable.{HashSet, HashMap, Set}
+import com.z0rchain.jabber.JID
+import com.z0rchain.jabber.messages.{RosterDump, RosterGet, RosterPart, RosterJoin}
+import concurrent.duration._
+import org.slf4j.LoggerFactory
 
 case class RosterEntry(nick: String, jid: JID)
 
@@ -16,6 +17,14 @@ class RosterActor extends Actor {
     if (!_channelRosters.contains(channel))
       _channelRosters += channel -> HashSet.empty[RosterEntry]
     _channelRosters(channel)
+  }
+
+  override def preStart = {
+    _logger.info("Pre-start.")
+
+    import context.dispatcher
+
+    context.system.scheduler.schedule(0.seconds, 5.seconds, self, RosterDump)
   }
 
   def receive = {
@@ -32,8 +41,7 @@ class RosterActor extends Actor {
       sender ! _channelRosters.getOrElse(channel, Set.empty[RosterEntry])
 
     case RosterDump =>
-      _logger.info("Roster dump...")
-      _logger.info(_channelRosters.toString)
+      _logger.info("Roster dump: %s".format(_channelRosters))
 
     case x =>
       _logger.warn("Unknown message received: %s".format(x))
