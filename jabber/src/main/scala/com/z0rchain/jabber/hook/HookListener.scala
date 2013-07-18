@@ -37,10 +37,10 @@ class HookListener(chat: MultiUserChat, rosterActor: ActorRef) extends PacketLis
               rosterActor ! RosterPart(StringUtils.parseBareAddress(presence.getFrom), userJid, userNick)
 
           case _ =>
-            _logger.info("Ignoring non-MUC presence from %s.".format(presence.getFrom))
+            _logger.debug("Ignoring non-MUC presence from %s.".format(presence.getFrom))
         }
       case _ =>
-        _logger.info("Got unknown packet: %s".format(packet.toXML))
+        _logger.debug("Got unknown packet: %s".format(packet.toXML))
     }
   }
 
