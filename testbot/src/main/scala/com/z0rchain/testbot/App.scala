@@ -38,34 +38,43 @@ object App {
     config.setSASLAuthenticationEnabled(true)
 
     val actorSystem = ActorSystem("ScalaBot")
-    val rosterActor = actorSystem.actorOf(Props[RosterActor])
-    val messageActor = actorSystem.actorOf(Props[MessageActor])
 
-    _logger.info("Connecting as %s@%s/%s...".format(botConfig.user, botConfig.domain, botConfig.resource))
+    try {
+      val rosterActor = actorSystem.actorOf(Props[RosterActor])
+      val messageActor = actorSystem.actorOf(Props[MessageActor])
 
-    val connection = new XMPPConnection(config)
-    connection.connect()
-    connection.login(botConfig.user, botConfig.password, botConfig.resource)
+      _logger.info("Connecting as %s@%s/%s...".format(botConfig.user, botConfig.domain, botConfig.resource))
 
-    _logger.info("Connected.")
+      val connection = new XMPPConnection(config)
+      connection.connect()
+      connection.login(botConfig.user, botConfig.password, botConfig.resource)
 
-    _logger.info("Joining channel %s...".format(botConfig.channel))
+      _logger.info("Connected.")
 
-    val muc = new MultiUserChat(connection, botConfig.channel)
-    val listener = new HookListener(muc, rosterActor, messageActor)
+      _logger.info("Joining channel %s...".format(botConfig.channel))
 
-    connection.addPacketListener(listener, new OrFilter(new PacketTypeFilter(classOf[Message]), new PacketTypeFilter(classOf[Presence])))
+      val muc = new MultiUserChat(connection, botConfig.channel)
+      val listener = new HookListener(muc, rosterActor, messageActor)
 
-    val history = new DiscussionHistory
-    history.setMaxStanzas(0)
+      connection.addPacketListener(listener, new OrFilter(new PacketTypeFilter(classOf[Message]), new PacketTypeFilter(classOf[Presence])))
 
-    muc.join(botConfig.nick, "", history, 100000)
+      val history = new DiscussionHistory
+      history.setMaxStanzas(0)
 
-    _logger.info("Channel %s joined.".format(botConfig.channel))
-    
-    muc.sendMessage("Sup nerds")
+      muc.join(botConfig.nick, "", history, 100000)
 
-    actorSystem.awaitTermination()
-    _logger.info("Shutdown successful.")
+      _logger.info("Channel %s joined.".format(botConfig.channel))
+
+      muc.sendMessage("Sup nerds")
+
+      actorSystem.awaitTermination()
+      _logger.info("Shutdown successful.")
+    } catch {
+      case e: Exception =>
+        _logger.error("An unhandled exception occurred.", e)
+        actorSystem.shutdown()
+        actorSystem.awaitTermination()
+
+    }
   }
 }
